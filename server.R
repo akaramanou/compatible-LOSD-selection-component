@@ -2,11 +2,9 @@
 # This is the server of the compatible-LOSD-selection-component
 #
 
-# Define server logic required to draw a histogram
 
 source("setServerOptions.R")
 source("getCubeObservations.R")
-source("calculateFeatures.R")
 
 results <-reactiveValues(SME=NULL, NV=NULL,SE=NULL)
 
@@ -63,7 +61,7 @@ ML_server <- shinyServer(function(input, output) {
     results <- runQuery(q)
     
     #create the checkboxGroup
-    checkboxGroupInput("checkGroup", label = "Please select the predictors", 
+    checkboxGroupInput("checkGroup", label = "Please select compatible datasets", 
                        choices = results$data.datasets.schema,
                        selected = 1)
   })#end of renderUI
@@ -73,42 +71,22 @@ ML_server <- shinyServer(function(input, output) {
   #create action buttons of the UI
   output$actionbutton <-renderUI ({
     if (identical(input$var, "")) return()
-    actionButton("action", label = "Find predictors") 
+    actionButton("action", label = "Find compatible datasets") 
   }
   )
-  output$actionbutton2 <-renderUI ({
-    if (is.null(v$data)) return()
-    actionButton("action2", label = "Extract features") 
-  })#end of renderUI
-  
-  #########################################################################################
-  
-  #create and present the plots
-  output$plot <- renderPlot({
-    if (is.null(b$data)) return()
-    x_datasets <-reactive({as.vector(input$checkGroup)}) #get the selected compatible datasets
-    y_dataset <- reactive(input$var) #get the selected response dataset
-    
-    selectionInput2 <- reactive(input$y) #get the selected year
-    year<-paste('reference_period:',selectionInput2())
 
-    calculateFeatures(y_dataset, x_datasets, year) #calculate the predictors and create (1) the Lambda-Coefficients plot and (2) the Lambda - MSE Error plot
-    
-  }, height = "auto", width = "auto") #end of renderPlot
+  output$download <- renderUI({
+    if (is.null(v$data)) return()
+    downloadButton('OutputFile', 'Extract Datasets')
+  })
   
-  
-  #########################################################################################
-  
-  #return the Lowest MSE value along with the number of variables
-  output$vars <- renderText({
-    if(is.null(results$MSE)) return()
-    paste(c ("Lowest MSE:" , results$MSE , "Number of Variables:" , results$NV ))
-  }) #end of renderText
-  
-  #return the 1 Standard Error value along with the number of variables
-  output$vars2 <- renderText({
-    if(is.null(results$MSE)) return()
-    paste(c ("1 Standard Error :", results$SE, "Number of Variables:", results$NV1 ))
-  }) #end of renderText
-  
+  output$OutputFile <- downloadHandler(
+      filename = function() {
+         paste('datasets', '.csv', sep='')
+       },
+      content = function(file) {
+         x <- as.vector(input$checkGroup)
+         write.table(x, file, row.names = FALSE, col.names=FALSE)
+       }
+    )
 }) #end of shinyServer
