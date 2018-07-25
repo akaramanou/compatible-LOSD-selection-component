@@ -3,7 +3,6 @@
 #
 
 
-
 #The above is a graphql a query to get all datasets from statistics.gov.scot
 q <- '{datasets(and:{ componentValues:
                                     [{component: \"http://purl.org/linked-data/sdmx/2009/dimension#refArea\" 
@@ -18,7 +17,7 @@ result<-runQuery(q)
 ML_ui <- shinyUI(fluidPage(
   
   # Define the application title
-  titlePanel("Dataset selection"),
+  titlePanel("Compatible LOSD selection"),
 
   #define the layout of the UI (one sidebar panel and one menupanel)  
   sidebarLayout(
@@ -37,14 +36,10 @@ ML_ui <- shinyUI(fluidPage(
         ,uiOutput("yearCB"),
         uiOutput("actionbutton")
         ),
-    #mainpanel is about (1) selecting the predictors and (2) presenting the lasso plots
+    #mainpanel is about selecting and extracting compatible datasets 
     mainPanel(
               uiOutput("xdatasets"), #Based on the selection of time values this presents compatible datasets
-              uiOutput("actionbutton2"),
-              hr(),
-              plotOutput("plot"), #This presents (1) the Lambda-Coefficients plot and (2) the Lambda - MSE Error plot
-              verbatimTextOutput("vars"), #This presents Lowest MSE value along with the number of variables
-              verbatimTextOutput("vars2") #This presents 1 Standard Error value along with the number of variables
-              )
+              uiOutput("download")
+             )
   )))
  
