@@ -1,5 +1,5 @@
-# compatible-LOSD-selection-component
-Te Compatible LOSD Selection component offers an interface that facilitates the selection of compatible statistical datasets that can be used for machine learning analysis. The software is based on R Shiny (https://shiny.rstudio.com/) and obtains statistical datasets from the Scottish data portal. The component allows selecting a dataset slice for the response variable from the Scottish portal and then searches and presents compatible datasets based on five compatibility criteria.
+# compatible-LOSD-selection-tool
+Te Compatible LOSD Selection tool offers an interface that facilitates the selection of compatible statistical datasets that can be used for machine learning analysis. The tool is based on R Shiny (https://shiny.rstudio.com/) and obtains statistical datasets from the Scottish data portal. The tool allows selecting a dataset slice for the response variable from the Scottish portal and then searches and presents compatible datasets based on five compatibility criteria.
 
 
 
